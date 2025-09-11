@@ -5,18 +5,12 @@ dotenv.config();
 
 export const startSendOtpConsumer = async () => {
   try {
-    const connection = await amqp.connect({
-      protocol: "amqp",
-      hostname: process.env.Rabbitmq_Host,
-      port: 5672,
-      username: process.env.Rabbitmq_Username,
-      password: process.env.Rabbitmq_Password,
-    });
+    // ✅ Connect using CloudAMQP URL
+    const connection = await amqp.connect(process.env.CLOUDAMQP_URL as string);
 
     const channel = await connection.createChannel();
 
     const queueName = "send-otp";
-
     await channel.assertQueue(queueName, { durable: true });
 
     console.log("✅ Mail Service consumer started, listening for otp emails");
@@ -29,6 +23,7 @@ export const startSendOtpConsumer = async () => {
           const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
+            secure: true, // ⚡ add this for gmail + port 465
             auth: {
               user: process.env.EMAIL_USER,
               pass: process.env.EMAIL_PASSWORD,
@@ -36,20 +31,21 @@ export const startSendOtpConsumer = async () => {
           });
 
           await transporter.sendMail({
-            from: "Chat app",
+            from: `"Chat App" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             text: body,
           });
 
-          console.log(`OTP mail sent to ${to}`);
+          console.log(`✅ OTP mail sent to ${to}`);
           channel.ack(msg);
         } catch (error) {
-          console.log("Failed to send otp", error);
+          console.error("❌ Failed to send otp", error);
+          channel.nack(msg, false, true); // requeue the message
         }
       }
     });
   } catch (error) {
-    console.log("Failed to start rabbitmq consumer", error);
+    console.error("❌ Failed to start RabbitMQ consumer", error);
   }
 };
