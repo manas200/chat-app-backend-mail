@@ -5,6 +5,7 @@ dotenv.config();
 
 export const startSendOtpConsumer = async () => {
   try {
+    console.log("CLOUDAMQP_URL:", process.env.CLOUDAMQP_URL);
     const connection = await amqp.connect(process.env.CLOUDAMQP_URL as string);
 
     const channel = await connection.createChannel();
