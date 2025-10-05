@@ -4,11 +4,14 @@ import { startSendOtpConsumer } from "./consumer.js";
 
 dotenv.config();
 
-startSendOtpConsumer();
-
 const app = express();
-console.log("🔁 Source file: src/index.ts running...");
+
+app.get("/", (_, res) => {
+  res.send("✅ Mail service alive");
+});
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+  console.log(`🌐 Mail service running on port ${process.env.PORT}`);
+
+  startSendOtpConsumer();
 });
