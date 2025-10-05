@@ -6,8 +6,8 @@ dotenv.config();
 export const startSendOtpConsumer = async () => {
   try {
     console.log("CLOUDAMQP_URL:", process.env.CLOUDAMQP_URL);
-    const connection = await amqp.connect(process.env.CLOUDAMQP_URL as string);
 
+    const connection = await amqp.connect(process.env.CLOUDAMQP_URL as string);
     const channel = await connection.createChannel();
 
     const queueName = "send-otp";
@@ -23,7 +23,7 @@ export const startSendOtpConsumer = async () => {
           const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
-            secure: true, // ⚡ add this for gmail + port 465
+            secure: true,
             auth: {
               user: process.env.EMAIL_USER,
               pass: process.env.EMAIL_PASSWORD,
@@ -41,7 +41,7 @@ export const startSendOtpConsumer = async () => {
           channel.ack(msg);
         } catch (error) {
           console.error("❌ Failed to send otp", error);
-          channel.nack(msg, false, true); // requeue the message
+          channel.nack(msg, false, true);
         }
       }
     });
