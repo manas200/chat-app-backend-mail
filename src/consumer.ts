@@ -5,7 +5,6 @@ dotenv.config();
 
 export const startSendOtpConsumer = async () => {
   try {
-    // ✅ Connect using CloudAMQP URL
     const connection = await amqp.connect(process.env.CLOUDAMQP_URL as string);
 
     const channel = await connection.createChannel();
