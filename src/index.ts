@@ -13,6 +13,16 @@ app.get("/", (_, res) => {
   res.send("✅ Mail service alive");
 });
 
+// Enhanced health check endpoint for monitoring
+app.get("/health", (_, res) => {
+  res.status(200).json({
+    status: "healthy",
+    service: "mail-service",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Simple direct-send test endpoint to validate SendGrid configuration
 app.post("/send-test", async (req, res) => {
   const { to, subject = "Pulse Chat OTP Test", body = "Hello from Pulse Chat" } = req.body;
