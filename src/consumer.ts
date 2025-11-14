@@ -35,9 +35,8 @@ export const startSendOtpConsumer = async () => {
     console.log("CLOUDAMQP_URL:", CLOUDAMQP_URL);
 
     const connection = await amqp.connect(CLOUDAMQP_URL);
-    const channel = await connection.createChannel();
+    const channel = await connection.createChannel(); // Limit unacked messages to avoid memory pressure
 
-    // Limit unacked messages to avoid memory pressure
     await channel.prefetch(5);
 
     const queueName = "send-otp";
