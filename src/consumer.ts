@@ -6,27 +6,27 @@ dotenv.config();
 import { exec } from "child_process";
 
 // Function to log disk usage
-const logDiskUsage = () => {
-  // This command finds the top 5 largest files/folders
-  // and also shows the main disk's total usage.
-  const command = "df -h && du -h / | sort -rh | head -5";
+// const logDiskUsage = () => {
+//   // This command finds the top 5 largest files/folders
+//   // and also shows the main disk's total usage.
+//   const command = "df -h && du -h / | sort -rh | head -5";
 
-  exec(command, (error, stdout, stderr) => {
-    console.log("--- 🔎 START DISK USAGE REPORT ---");
-    if (error) {
-      console.error(`exec error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-    }
+//   exec(command, (error, stdout, stderr) => {
+//     console.log("--- 🔎 START DISK USAGE REPORT ---");
+//     if (error) {
+//       console.error(`exec error: ${error.message}`);
+//       return;
+//     }
+//     if (stderr) {
+//       console.error(`stderr: ${stderr}`);
+//     }
 
-    // This will print the full report to your Render Logs
-    console.log(stdout);
+//     // This will print the full report to your Render Logs
+//     console.log(stdout);
 
-    console.log("--- 🛑 END DISK USAGE REPORT ---");
-  });
-};
+//     console.log("--- 🛑 END DISK USAGE REPORT ---");
+//   });
+// };
 
 // --- Your Mail Service/RabbitMQ code starts here ---
 // e.g., connectToRabbitMQ();
@@ -137,7 +137,7 @@ export const startSendOtpConsumer = async () => {
 };
 
 // Log usage right at the start
-logDiskUsage();
+// logDiskUsage();
 
-// Also log usage every hour to see how it grows
-setInterval(logDiskUsage, 3600000); // 3600000 ms = 1 hour
+// // Also log usage every hour to see how it grows
+// setInterval(logDiskUsage, 3600000); // 3600000 ms = 1 hour
